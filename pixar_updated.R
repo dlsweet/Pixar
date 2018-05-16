@@ -1,9 +1,10 @@
 #use libs
 library(ggplot2);library(plyr);library(reshape2); library(directlabels)
-library(grid);library(scales);library(RColorBrewer); library(wordcloud); library(gridExtra)
+library(grid);library(scales);library(RColorBrewer); library(wordcloud); 
+library(gridExtra); library(magrittr)
 
 #load data
-pix=read.csv("pixar.csv")
+pix=read.csv("C:/Users/lukke.sweet/Desktop/Pixar-dlsweet-patch-1/pixar.csv")
 
 
 #Create a function for the look of my charts
@@ -20,7 +21,7 @@ my_theme <- function() {
   color.title = palette[9]
 
   # Create basic construction of chart
-  theme_bw(base_size=9, base_family="Georgia") + 
+  theme_bw(base_size=9) + 
 
   # Set the entire chart region to a light gray color
   theme(panel.background=element_rect(fill=color.panel, color=color.background)) +
@@ -51,18 +52,26 @@ my_theme <- function() {
 is.even <- function(x) {x %% 2 == 0}
 is.odd <- function(x) {x %% 2 != 0}
 
+yearlabel <- seq(1994, 2018)
+yearlabel2 <- ifelse(yearlabel %in% seq(1994, 2018, by = 2), yearlabel, "") 
 
 ggplot(pix, aes(x=year, y=tomatoes))+
 my_theme()+
 geom_point(aes(size=weekend, color=factor(Oscars))) +
 scale_colour_manual(values = c("#fd8d3c","#252525", "#41b6c4"), guide_legend(title="Best Animated Film?"))+
 scale_size_area(guide_legend(title="Opening Weekend Gross \n ($ Millions)"), max_size=12)+
+scale_y_continuous(breaks = seq(30, 100, by = 10), limits = c(35, 102)) +
+scale_x_continuous(breaks = seq(1994, 2018, by = 1), limits = c(1995, 2018), labels = yearlabel2) +
 geom_text(data=subset(pix, is.even(year)), aes(label=movie), vjust=3, hjust=0.5, size=3)+
 geom_text(data=subset(pix, is.odd(year)), aes(label=movie), vjust=-1.87, hjust=.5, size=3)+
 labs(title= "", x="Year", y="Rotten Tomatoes % Fresh")+
-ggtitle(expression(atop(bold("Pixar is Back, Baby"), atop(italic("20 years of pixar at a glance (part I)"), atop(italic("Created by: Alex Albright (thelittledataset.com/@AllbriteAllday)")),""))))+
+ggtitle(expression(atop(bold("Pixar is Back, Baby"), atop(italic("25(ish) years of Pixar at a glance (part I)"), 
+                   atop(italic("Created by: Alex Albright (thelittledataset.com/@AllbriteAllday)"),
+                        atop(italic("Updated by: Lukke Sweet (lukke.sweet@starkmhar.org)"))),""))))+
 theme(plot.title = element_text(size = 16, face = "bold", colour = "black", vjust = 0.5, hjust=0.5)) +
-theme(legend.title = element_text(size=10, face="bold"))
+theme(legend.title = element_text(size=10, face="bold")) +
+theme(axis.text.x=element_text(angle = 45, hjust=.75)) +
+geom_smooth(method = "auto", se = F)
 
 
 ggplot(pix, aes(x=year, y=imdb))+
@@ -73,10 +82,15 @@ scale_size_area(guide_legend(title="Opening Weekend Gross \n ($ Millions)"), max
 geom_text(data=subset(pix, year!=2004), aes(label=movie), vjust=-2.2, hjust=0.5, size=3)+
 geom_text(data=subset(pix, year==2004), aes(label=movie), vjust=3, hjust=0.5, size=3)+
 labs(title= "", x="Year", y="IMDb Rating (Out of 10)")+
-ggtitle(expression(atop(bold("Pixar is Back, Baby"), atop(italic("20 years of pixar at a glance (part II)"), atop(italic("Created by: Alex Albright (thelittledataset.com/@AllbriteAllday)")),""))))+
+ggtitle(expression(atop(bold("Pixar is Back, Baby"), atop(italic("25(ish) years of Pixar at a glance (part II)"), 
+                   atop(italic("Created by: Alex Albright (thelittledataset.com/@AllbriteAllday)"), 
+                        atop(italic("Updated by: Lukke Sweet (lukke.sweet@starkmhar.org)"))),""))))+
 theme(plot.title = element_text(size = 16, face = "bold", colour = "black", vjust = 0.5, hjust=0.5)) +
 theme(legend.title = element_text(size=10, face="bold"))+ 
-ylim(6,10)
+geom_smooth(method = "auto", se = F)+
+scale_y_continuous(breaks = seq(3, 10, by = 1), limits = c(6, 10)) +
+scale_x_continuous(breaks = seq(1994, 2018, by = 1), limits = c(1995, 2018), labels = yearlabel2) +
+  theme(axis.text.x=element_text(angle = 45, hjust=.75))
 
 ggplot(pix, aes(x=year, y=meta))+
 my_theme()+
@@ -86,7 +100,12 @@ scale_size_area(guide_legend(title="Opening Weekend Gross \n ($ Millions)"), max
 geom_text(data=subset(pix, year!=2004), aes(label=movie), vjust=-2, hjust=0.5, size=3)+
 geom_text(data=subset(pix, year==2004), aes(label=movie), vjust=3, hjust=0.5, size=3)+
 labs(title= "", x="Year", y="Metacritic 'Metascore'")+
-ggtitle(expression(atop(bold("Pixar is Back, Baby"), atop(italic("20 years of pixar at a glance (part III)"), atop(italic("Created by: Alex Albright (thelittledataset.com/@AllbriteAllday)")),""))))+
+ggtitle(expression(atop(bold("Pixar is Back, Baby"), atop(italic("25(ish) years of Pixar at a glance (part III)"), 
+                   atop(italic("Created by: Alex Albright (thelittledataset.com/@AllbriteAllday)"),
+                        atop(italic("Updated by: Lukke Sweet (lukke.sweet@starkmhar.org)"))),""))))+
 theme(plot.title = element_text(size = 16, face = "bold", colour = "black", vjust = 0.5, hjust=0.5)) +
 theme(legend.title = element_text(size=10, face="bold"))+
-ylim(50,100)
+geom_smooth(method = "auto", se = F) +
+scale_y_continuous(breaks = seq(50, 100, by = 10), limits = c(50, 102)) +
+scale_x_continuous(breaks = seq(1994, 2018, by = 1), limits = c(1995, 2018), labels = yearlabel2) +
+  theme(axis.text.x=element_text(angle = 45, hjust=.75))

@@ -3,7 +3,7 @@ library(ggplot2);library(plyr);library(reshape2); library(directlabels)
 library(grid);library(scales);library(RColorBrewer); library(wordcloud); library(gridExtra)
 
 #load data
-pix=read.csv("pixar.csv")
+pix=read.csv("C:/Users/lukke.sweet/Desktop/Pixar-dlsweet-patch-1/pixar.csv")
 
 #Create a function for the look of my charts
 #Used minimaxir's code as base R code to work off of
