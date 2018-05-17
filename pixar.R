@@ -3,7 +3,7 @@ library(ggplot2);library(plyr);library(reshape2); library(directlabels)
 library(grid);library(scales);library(RColorBrewer); library(wordcloud); library(gridExtra)
 
 #load data
-pix=read.csv("C:/Users/lukke.sweet/Desktop/Pixar-dlsweet-patch-1/pixar.csv")
+pix=read.csv("pixar.csv")
 
 #Create a function for the look of my charts
 #Used minimaxir's code as base R code to work off of
@@ -19,7 +19,7 @@ my_theme <- function() {
   color.title = palette[9]
 
   # Create basic construction of chart
-  theme_bw(base_size=9, base_family="Georgia") + 
+  theme_bw(base_size=9) + 
 
   # Set the entire chart region to a light gray color
   theme(panel.background=element_rect(fill=color.panel, color=color.background)) +
